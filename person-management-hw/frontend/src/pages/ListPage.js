@@ -7,8 +7,13 @@ function ListPage() {
   const navigate = useNavigate();
 
   const fetchPeople = async () => {
-    const res = await axios.get("http://localhost:5000/api/people");
-    setPeople(res.data);
+    try {
+      const res = await axios.get("http://localhost:5000/api/people");
+      setPeople(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Veriler alınamadı ❌");
+    }
   };
 
   useEffect(() => {
@@ -18,8 +23,32 @@ function ListPage() {
   const handleDelete = async (id) => {
     if (!window.confirm("Silmek istediğine emin misin?")) return;
 
-    await axios.delete(`http://localhost:5000/api/people/${id}`);
-    fetchPeople();
+    try {
+      await axios.delete(`http://localhost:5000/api/people/${id}`);
+      fetchPeople();
+    } catch (err) {
+      console.error(err);
+      alert("Silme hatası ❌");
+    }
+  };
+
+  const handleEdit = async (person) => {
+    const newName = prompt("Yeni isim:", person.full_name);
+    const newEmail = prompt("Yeni email:", person.email);
+
+    if (!newName || !newEmail) return;
+
+    try {
+      await axios.put(`http://localhost:5000/api/people/${person.id}`, {
+        full_name: newName,
+        email: newEmail,
+      });
+
+      fetchPeople();
+    } catch (err) {
+      console.error(err);
+      alert("Güncelleme hatası ❌");
+    }
   };
 
   return (
@@ -45,9 +74,8 @@ function ListPage() {
               <td>{p.full_name}</td>
               <td>{p.email}</td>
               <td>
-                <button onClick={() => handleDelete(p.id)}>
-                  Sil
-                </button>
+                <button onClick={() => handleDelete(p.id)}>Sil</button>
+                <button onClick={() => handleEdit(p)}>Düzenle</button>
               </td>
             </tr>
           ))}
