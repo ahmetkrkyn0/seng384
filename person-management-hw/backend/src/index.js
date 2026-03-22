@@ -44,3 +44,14 @@ app.post("/api/people", async (req, res) => {
 app.listen(5000, () => {
   console.log("Server 5000 portunda çalışıyor");
 });
+
+// GET ALL
+app.get("/api/people", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM people");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "SERVER_ERROR" });
+  }
+});
