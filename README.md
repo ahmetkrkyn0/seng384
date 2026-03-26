@@ -116,15 +116,6 @@ Table: **people**
 
 ---
 
-## 📸 Screenshots
-
-* Form Page (Add Person)
-* List Page (View People)
-* CRUD Operations
-
-(Add screenshots here)
-
----
 
 ## 🎯 Features
 
